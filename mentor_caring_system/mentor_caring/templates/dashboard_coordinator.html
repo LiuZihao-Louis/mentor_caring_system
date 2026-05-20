@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>MCP Coordinator Dashboard</h2>
+<section class="grid two">
+  <div class="card"><h3>Students in Department</h3>{% set rows = students|to_dicts %}{% include '_table.html' %}</div>
+  <div class="card"><h3>Mentors in Department</h3>{% set rows = mentors|to_dicts %}{% include '_table.html' %}</div>
+</section>
+<section class="card">
+  <h3>Search Student Information</h3>
+  <form method="get" action="{{ url_for('frontend.coord_student_search_page') }}">
+    <input name="student_id" placeholder="Student ID" required>
+    <button>Search</button>
+  </form>
+</section>
+<section class="card">
+  <h3>Forward Special Case to Faculty Consultant</h3>
+  <form method="post" action="{{ url_for('frontend.coord_special_forward_page') }}">
+    <input name="student_id" placeholder="Student ID" required>
+    <input name="consultant_id" value="FC001" required>
+    <textarea name="description" required></textarea>
+    <button>Forward</button>
+  </form>
+</section>
+{% endblock %}

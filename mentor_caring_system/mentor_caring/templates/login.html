@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card narrow">
+  <h2>Login</h2>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Account <input name="account" required></label>
+    <label>Password <input name="password" type="password" required></label>
+    <button type="submit">Login</button>
+  </form>
+  <p class="muted">Seed accounts: admin/admin123, alice/consultant123, mary/mentor123, ruth/coord123, sam/staff123, 123456789/student123</p>
+</section>
+{% endblock %}

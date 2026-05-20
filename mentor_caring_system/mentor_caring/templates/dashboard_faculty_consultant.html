@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Faculty Consultant Dashboard</h2>
+<section class="card">
+  <h3>Faculty</h3>
+  <p>{{ consultant.faculty_name }}</p>
+</section>
+<section class="grid two">
+  <div class="card">
+    <h3>Import Organization Units</h3>
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('frontend.fc_org_import_page') }}">
+      <textarea name="rows" placeholder='[{"Faculty":"FST","Department":"DCS","Major":"CST"}]'></textarea>
+      <input type="file" name="xlsx_file" accept=".xlsx">
+      <button>Import Organization</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Import Students and Mentors</h3>
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('frontend.fc_students_import_page') }}">
+      <input name="academic_year" value="2024-2025">
+      <textarea name="rows" placeholder='[{"Student ID":"111","Student Name":"Tom","Major":"CST","Status":"normal","Group ID":"2024-2025-Y2","Mentor":"Mary Lee","Office":"T1-102","Mentor Email":"marylee@bnbu.edu.cn"}]'></textarea>
+      <input type="file" name="xlsx_file" accept=".xlsx">
+      <button>Import Students</button>
+    </form>
+  </div>
+</section>
+<section class="grid two">
+  <div class="card">
+    <h3>Groups</h3>
+    {% set rows = groups|to_dicts %}{% include '_table.html' %}
+  </div>
+  <div class="card">
+    <h3>Students</h3>
+    {% set rows = students|to_dicts %}{% include '_table.html' %}
+  </div>
+  <div class="card">
+    <h3>Mentors</h3>
+    {% set rows = mentors|to_dicts %}{% include '_table.html' %}
+  </div>
+  <div class="card">
+    <h3>Departments</h3>
+    {% set rows = departments|to_dicts %}{% include '_table.html' %}
+  </div>
+</section>
+<section class="card">
+  <h3>Search Student Information</h3>
+  <form method="get" action="{{ url_for('frontend.fc_student_search_page') }}">
+    <input name="student_id" placeholder="Student ID" required>
+    <button>Search</button>
+  </form>
+</section>
+<section class="grid two">
+  <div class="card">
+    <h3>Change Mentor</h3>
+    <form method="post" onsubmit="this.action='/faculty-consultant/groups/'+this.group_id.value+'/mentor/change'">
+      <input name="group_id" placeholder="Group ID" required>
+      <input name="new_mentor_id" placeholder="New mentor ID" required>
+      <button>Change Mentor</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Update Mentor Group</h3>
+    <form method="post" onsubmit="this.action='/faculty-consultant/groups/'+this.group_id.value+'/students/add'">
+      <input name="group_id" placeholder="Group ID" required>
+      <input name="student_id" placeholder="Student ID" required>
+      <button>Add Student</button>
+    </form>
+    <form method="post" onsubmit="this.action='/faculty-consultant/groups/'+this.group_id.value+'/students/'+this.student_id.value+'/remove'">
+      <input name="group_id" placeholder="Group ID" required>
+      <input name="student_id" placeholder="Student ID" required>
+      <button>Remove Student</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Designate Coordinator</h3>
+    <form method="post" action="{{ url_for('frontend.fc_designate_coordinator_page') }}">
+      <input name="department_name" placeholder="Department" required>
+      <input name="coordinator_id" placeholder="Coordinator ID" required>
+      <button>Designate</button>
+    </form>
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('frontend.fc_import_coordinators_page') }}">
+      <textarea name="rows" placeholder='[{"Coordinator Name":"Chris","Email":"chris@bnbu.edu.cn","Department":"DCS"}]'></textarea>
+      <input type="file" name="xlsx_file" accept=".xlsx">
+      <button>Import Coordinators</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Export Records</h3>
+    <form method="post" action="{{ url_for('frontend.fc_export_post_page') }}">
+      <input name="department_name" placeholder="Department">
+      <input name="major_name" placeholder="Major">
+      <input name="student_name" placeholder="Student Name">
+      <button>Export Word</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

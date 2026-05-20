@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Supporting Staff Dashboard</h2>
+<section class="grid two">
+  <div class="card"><h3>All Student Logs</h3>{% set rows = logs|to_dicts %}{% include '_table.html' %}</div>
+  <div class="card"><h3>Feedback</h3>{% set rows = feedback_list|to_dicts %}{% include '_table.html' %}</div>
+</section>
+{% endblock %}

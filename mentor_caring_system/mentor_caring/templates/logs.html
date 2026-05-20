@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Logs</h2>
+<section class="card">
+<form method="get"><input name="student_id" placeholder="Student ID"><input name="function_access" placeholder="Function"><button>Filter</button></form>
+{% set rows = logs|to_dicts %}{% include '_table.html' %}
+</section>
+{% endblock %}

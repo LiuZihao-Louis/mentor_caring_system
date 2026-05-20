@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card"><h2>Export / Result</h2><pre>{{ result | tojson(indent=2) }}</pre></section>
+{% endblock %}

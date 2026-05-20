@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Messages</h2>
+<section class="card">
+  <h3>Send Message</h3>
+  <form method="post" action="{% if user.role == 'student' %}{{ url_for('frontend.student_send_message') }}{% elif user.role == 'mentor' %}{{ url_for('frontend.mentor_messages_send_page') }}{% elif user.role == 'faculty_consultant' %}{{ url_for('frontend.fc_send_message_page') }}{% elif user.role == 'mcp_coordinator' %}{{ url_for('frontend.coord_messages_send_page') }}{% endif %}">
+    <select name="receiver_id">{% for r in receivers %}{% if r.id != user.id %}<option value="{{ r.id }}">{{ r.name }} ({{ r.role }})</option>{% endif %}{% endfor %}</select>
+    <input name="related_student_id" placeholder="Related Student ID (optional)">
+    <textarea name="content" required></textarea>
+    <button>Send</button>
+  </form>
+</section>
+<section class="grid two">
+  <div class="card"><h3>Inbox</h3>{% set rows = inbox|to_dicts %}{% include '_table.html' %}</div>
+  <div class="card"><h3>Sent</h3>{% set rows = sent|to_dicts %}{% include '_table.html' %}</div>
+</section>
+<section class="card">
+  <h3>Respond</h3>
+  <form method="post" action="{% if user.role == 'student' %}{{ url_for('frontend.student_respond_message') }}{% elif user.role == 'mentor' %}{{ url_for('frontend.mentor_messages_respond_page') }}{% elif user.role == 'faculty_consultant' %}{{ url_for('frontend.fc_respond_message_page') }}{% elif user.role == 'mcp_coordinator' %}{{ url_for('frontend.coord_messages_respond_page') }}{% endif %}">
+    <input name="message_id" placeholder="Message ID" required>
+    <textarea name="content" required></textarea>
+    <button>Respond</button>
+  </form>
+</section>
+{% endblock %}

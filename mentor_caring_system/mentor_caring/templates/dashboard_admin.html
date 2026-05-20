@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Administrator Dashboard</h2>
+<section class="card">
+  <h3>System Statistics</h3>
+  <div class="stats">{% for k, v in stats.items() %}<span>{{ k }}: <strong>{{ v }}</strong></span>{% endfor %}</div>
+</section>
+<section class="card">
+  <h3>Organization</h3>
+  <h4>Faculties</h4>{% set rows = faculties|to_dicts %}{% include '_table.html' %}
+  <h4>Departments</h4>{% set rows = departments|to_dicts %}{% include '_table.html' %}
+  <h4>Majors</h4>{% set rows = majors|to_dicts %}{% include '_table.html' %}
+</section>
+<section class="grid two">
+  <div class="card">
+    <h3>Add Faculty</h3>
+    <form method="post" action="{{ url_for('frontend.admin_faculty_add_page') }}">
+      <input name="faculty_name" placeholder="Faculty name" required>
+      <button>Add Faculty</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Add Department</h3>
+    <form method="post" action="{{ url_for('frontend.admin_department_add_page') }}">
+      <input name="faculty_name" placeholder="Faculty name" required>
+      <input name="department_name" placeholder="Department name" required>
+      <button>Add Department</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Add Major</h3>
+    <form method="post" action="{{ url_for('frontend.admin_major_add_page') }}">
+      <input name="faculty_name" placeholder="Faculty name" required>
+      <input name="department_name" placeholder="Department name" required>
+      <input name="major_name" placeholder="Major name" required>
+      <button>Add Major</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Create User</h3>
+    <form method="post" action="{{ url_for('frontend.admin_user_create_page') }}">
+      <input name="user_id" placeholder="User ID" required>
+      <input name="name" placeholder="Full name" required>
+      <input name="account" placeholder="Login account" required>
+      <input name="email" placeholder="Email" required>
+      <select name="role" required>
+        <option value="student">Student</option>
+        <option value="mentor">Mentor</option>
+        <option value="mcp_coordinator">MCP Coordinator</option>
+        <option value="faculty_consultant">Faculty Consultant</option>
+        <option value="supporting_staff">Supporting Staff</option>
+        <option value="unassigned_staff">Unassigned Staff</option>
+      </select>
+      <input name="faculty_name" placeholder="Faculty">
+      <input name="department_name" placeholder="Department">
+      <label class="inline"><input type="checkbox" name="is_staff"> Staff member</label>
+      <input name="password" type="password" placeholder="Initial password" required>
+      <button>Create User</button>
+    </form>
+  </div>
+</section>
+<section class="card">
+  <h3>Import Organization Units</h3>
+  <form method="post" enctype="multipart/form-data" action="{{ url_for('frontend.admin_org_import_page') }}">
+    <textarea name="rows" placeholder='[{"Faculty":"FST","Department":"DCS","Major":"DS"}]'></textarea>
+    <input type="file" name="xlsx_file" accept=".xlsx">
+    <button>Import</button>
+  </form>
+</section>
+<section class="grid two">
+  <div class="card">
+    <h3>Users</h3>
+    {% set rows = users %}{% include '_table.html' %}
+  </div>
+  <div class="card">
+    <h3>Faculty Consultants</h3>
+    {% set rows = consultants|to_dicts %}{% include '_table.html' %}
+  </div>
+  <div class="card">
+    <h3>Supporting Staff</h3>
+    {% set rows = supporting_staff|to_dicts %}{% include '_table.html' %}
+  </div>
+  <div class="card">
+    <h3>Add Faculty Consultant</h3>
+  <form method="post" action="{{ url_for('frontend.admin_fc_add_page') }}">
+    <input name="user_id" placeholder="User ID" required>
+    <input name="faculty_name" placeholder="Faculty" required>
+    <button>Add</button>
+  </form>
+    <h3>Delete Faculty Consultant</h3>
+    <form method="post" action="{{ url_for('frontend.admin_fc_delete_page') }}">
+      <input name="consultant_id" placeholder="Consultant ID" required>
+      <input name="faculty_name" placeholder="Faculty" required>
+      <button>Delete</button>
+    </form>
+    <h3>Create Supporting Staff</h3>
+    <form method="post" action="{{ url_for('frontend.admin_staff_create_page') }}">
+      <input name="user_id" placeholder="User ID" required>
+      <button>Create Supporting Staff</button>
+    </form>
+    <h3>Delete Supporting Staff</h3>
+    <form method="post" action="{{ url_for('frontend.admin_staff_delete_page') }}">
+      <input name="staff_id" placeholder="Staff ID" required>
+      <button>Delete Supporting Staff</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

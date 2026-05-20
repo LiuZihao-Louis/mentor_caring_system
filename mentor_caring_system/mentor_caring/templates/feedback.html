@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Feedback</h2>
+{% if not staff_mode %}
+<section class="card">
+  <h3>Submit Feedback</h3>
+  <form method="post" action="{% if user.role == 'student' %}{{ url_for('frontend.student_submit_feedback') }}{% else %}{{ url_for('frontend.submit_feedback_page') }}{% endif %}">
+    <textarea name="content" maxlength="500" required></textarea>
+    <button>Submit</button>
+  </form>
+</section>
+{% endif %}
+<section class="card">
+  <h3>Feedback List</h3>
+  {% set rows = feedback_list|to_dicts %}{% include '_table.html' %}
+</section>
+{% if staff_mode %}
+<section class="card"><h3>Respond Feedback</h3><form method="post" onsubmit="this.action='/supporting-staff/feedback/'+this.feedback_id.value+'/respond'"><input name="feedback_id" required><textarea name="response" required></textarea><button>Respond</button></form></section>
+{% endif %}
+{% endblock %}

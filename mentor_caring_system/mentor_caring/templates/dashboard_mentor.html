@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Mentor Dashboard</h2>
+<section class="grid two">
+  <div class="card"><h3>Own MCP Groups</h3>{% set rows = groups|to_dicts %}{% include '_table.html' %}</div>
+  <div class="card"><h3>Students</h3>{% set rows = students|select|list|to_dicts %}{% include '_table.html' %}</div>
+</section>
+<section class="card">
+  <h3>Search Student Information</h3>
+  <form method="get" action="{{ url_for('frontend.mentor_student_search_page') }}">
+    <input name="student_id" placeholder="Student ID" required>
+    <button>Search</button>
+  </form>
+</section>
+<section class="card">
+  <h3>Interview Records</h3>
+  {% set rows = records|to_dicts %}{% include '_table.html' %}
+</section>
+<section class="card">
+  <h3>Create Interview Record</h3>
+  <form method="post" action="{{ url_for('frontend.mentor_record_create_page') }}">
+    <input name="student_id" placeholder="Student ID" required>
+    <input name="date" placeholder="YYYY-MM-DD" required>
+    <input name="time" placeholder="HH:MM" required>
+    <textarea name="problem_statement" placeholder="Problem statement" required></textarea>
+    <textarea name="interview_summary" placeholder="Interview summary" required></textarea>
+    <textarea name="follow_up_action" placeholder="Follow-up action"></textarea>
+    <button>Create Record</button>
+  </form>
+</section>
+<section class="grid two">
+  <div class="card">
+    <h3>Update Interview Record</h3>
+    <form method="post" onsubmit="this.action='/mentor/records/'+this.record_id.value+'/update'">
+      <input name="record_id" placeholder="Record ID" required>
+      <input name="date" placeholder="YYYY-MM-DD">
+      <input name="time" placeholder="HH:MM">
+      <textarea name="problem_statement" placeholder="Problem statement"></textarea>
+      <textarea name="interview_summary" placeholder="Interview summary"></textarea>
+      <textarea name="follow_up_action" placeholder="Follow-up action"></textarea>
+      <button>Update Record</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Delete Interview Record</h3>
+    <form method="post" onsubmit="this.action='/mentor/records/'+this.record_id.value+'/delete'">
+      <input name="record_id" placeholder="Record ID" required>
+      <button>Delete Record</button>
+    </form>
+  </div>
+</section>
+<section class="card">
+  <h3>Create Appointment Slots</h3>
+  <form method="post" action="{{ url_for('frontend.mentor_slots_page') }}">
+    <input name="student_id" placeholder="Student ID" required>
+    <input name="date" placeholder="YYYY-MM-DD" required>
+    <input name="start_time" placeholder="09:00" required>
+    <input name="end_time" placeholder="10:00" required>
+    <button>Create 30-minute Slots</button>
+  </form>
+</section>
+<section class="card">
+  <h3>Forward Special Case</h3>
+  <form method="post" action="{{ url_for('frontend.mentor_special_case_page') }}">
+    <input name="student_id" placeholder="Student ID" required>
+    <input name="coordinator_id" placeholder="Coordinator ID" value="COR001" required>
+    <textarea name="description" placeholder="Description" required></textarea>
+    <button>Forward</button>
+  </form>
+</section>
+{% endblock %}

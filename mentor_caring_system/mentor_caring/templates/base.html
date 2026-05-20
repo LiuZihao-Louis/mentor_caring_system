@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{{ title or 'Mentor Caring System' }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header>
+  <h1>BNBU Mentor Caring System</h1>
+  {% if user %}
+  <div class="userbar">{{ user.name }} · {{ user.role }} · <a href="{{ url_for('frontend.logout_page') }}">Logout</a></div>
+  <nav>
+    {% if user.role == 'student' %}
+      <a href="{{ url_for('frontend.student_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('frontend.student_mentor_page') }}">Mentor</a>
+      <a href="{{ url_for('frontend.student_records_page') }}">Records</a>
+      <a href="{{ url_for('frontend.student_messages_page') }}">Messages</a>
+      <a href="{{ url_for('frontend.student_appointments_page') }}">Appointments</a>
+      <a href="{{ url_for('frontend.student_feedback_page') }}">Feedback</a>
+    {% elif user.role == 'mentor' %}
+      <a href="{{ url_for('frontend.mentor_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('frontend.mentor_groups_page') }}">Groups</a>
+      <a href="{{ url_for('frontend.mentor_student_search_page') }}">Search Student</a>
+      <a href="{{ url_for('frontend.mentor_students_page') }}">Students</a>
+      <a href="{{ url_for('frontend.mentor_appointments_page') }}">Appointments</a>
+      <a href="{{ url_for('frontend.mentor_messages_page') }}">Messages</a>
+      <a href="{{ url_for('frontend.mentor_export_page') }}">Export</a>
+      <a href="{{ url_for('frontend.feedback_page') }}">Feedback</a>
+    {% elif user.role == 'faculty_consultant' %}
+      <a href="{{ url_for('frontend.faculty_consultant_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('frontend.fc_groups_page') }}">Groups</a>
+      <a href="{{ url_for('frontend.fc_student_search_page') }}">Student Search</a>
+      <a href="{{ url_for('frontend.fc_mentor_search_page') }}">Mentor Search</a>
+      <a href="{{ url_for('frontend.fc_logs_page') }}">Logs</a>
+      <a href="{{ url_for('frontend.fc_messages_page') }}">Messages</a>
+      <a href="{{ url_for('frontend.fc_export_page') }}">Export</a>
+      <a href="{{ url_for('frontend.feedback_page') }}">Feedback</a>
+    {% elif user.role == 'administrator' %}
+      <a href="{{ url_for('frontend.admin_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('frontend.admin_fc_page') }}">Consultants</a>
+      <a href="{{ url_for('frontend.admin_staff_page') }}">Supporting Staff</a>
+      <a href="{{ url_for('frontend.feedback_page') }}">Feedback</a>
+    {% elif user.role == 'mcp_coordinator' %}
+      <a href="{{ url_for('frontend.coordinator_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('frontend.coord_student_search_page') }}">Search Student</a>
+      <a href="{{ url_for('frontend.coord_students_page') }}">Students</a>
+      <a href="{{ url_for('frontend.coord_mentors_page') }}">Mentors</a>
+      <a href="{{ url_for('frontend.coord_messages_page') }}">Messages</a>
+      <a href="{{ url_for('frontend.coord_special_cases_page') }}">Special Cases</a>
+      <a href="{{ url_for('frontend.feedback_page') }}">Feedback</a>
+    {% elif user.role == 'supporting_staff' %}
+      <a href="{{ url_for('frontend.supporting_staff_dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('frontend.staff_logs_page') }}">Logs</a>
+      <a href="{{ url_for('frontend.staff_feedback_page') }}">Feedback</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</header>
+<main>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+document.querySelectorAll('form[method="post"], form[method="POST"]').forEach((form) => {
+  if (!form.querySelector('input[name="csrf_token"]')) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'csrf_token';
+    input.value = document.querySelector('meta[name="csrf-token"]').content;
+    form.appendChild(input);
+  }
+});
+</script>
+</body>
+</html>

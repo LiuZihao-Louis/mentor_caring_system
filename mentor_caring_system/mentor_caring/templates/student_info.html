@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Search Student Information</h2>
+<section class="card">
+  <form method="get">
+    <input name="student_id" placeholder="Student ID" value="{{ student_id or '' }}" required>
+    <button>Search</button>
+  </form>
+</section>
+{% if data %}
+<section class="grid two">
+  <div class="card">
+    <h3>Student Basic Information</h3>
+    <table>
+      {% for key, value in data.items() if key not in ['records', 'interview_records', 'mentor'] %}
+      <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% if data.mentor %}
+  <div class="card">
+    <h3>Mentor Information</h3>
+    <table>
+      {% for key, value in data.mentor.items() %}
+      <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+</section>
+<section class="card">
+  <h3>Interview Records</h3>
+  {% set rows = data.records if data.records is defined else data.interview_records %}
+  {% include '_table.html' %}
+</section>
+{% if editable %}
+<section class="grid two">
+  <div class="card">
+    <h3>Create Interview Record</h3>
+    <form method="post" action="{{ url_for('frontend.mentor_record_create_page') }}">
+      <input name="student_id" value="{{ data.student_id }}" required>
+      <input name="date" placeholder="YYYY-MM-DD" required>
+      <input name="time" placeholder="HH:MM" required>
+      <textarea name="problem_statement" placeholder="Problem statement" required></textarea>
+      <textarea name="interview_summary" placeholder="Interview summary" required></textarea>
+      <textarea name="follow_up_action" placeholder="Follow-up action"></textarea>
+      <button>Create Record</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>Update Interview Record</h3>
+    <form method="post" onsubmit="this.action='/mentor/records/'+this.record_id.value+'/update'">
+      <input name="record_id" placeholder="Record ID" required>
+      <input name="date" placeholder="YYYY-MM-DD">
+      <input name="time" placeholder="HH:MM">
+      <textarea name="problem_statement" placeholder="Problem statement"></textarea>
+      <textarea name="interview_summary" placeholder="Interview summary"></textarea>
+      <textarea name="follow_up_action" placeholder="Follow-up action"></textarea>
+      <button>Update Record</button>
+    </form>
+  </div>
+</section>
+{% endif %}
+{% endif %}
+{% endblock %}

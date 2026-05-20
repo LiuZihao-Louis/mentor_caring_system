@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Student Dashboard</h2>
+<section class="grid two">
+  <div class="card">
+    <h3>Basic Information</h3>
+    <table>
+      {% for k, v in info.items() if k not in ['mentor','interview_records'] %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}
+    </table>
+  </div>
+  <div class="card">
+    <h3>Mentor Information</h3>
+    {% if info.mentor %}<table>{% for k, v in info.mentor.items() %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</table>{% else %}<p>No mentor found.</p>{% endif %}
+  </div>
+</section>
+<section class="card">
+  <h3>Interview Records</h3>
+  {% set rows = info.interview_records %}
+  {% include '_table.html' %}
+</section>
+<section class="card">
+  <h3>Submit Feedback</h3>
+  <form method="post" action="{{ url_for('frontend.student_submit_feedback') }}">
+    <textarea name="content" maxlength="500" required></textarea>
+    <button>Submit Feedback</button>
+  </form>
+</section>
+{% endblock %}

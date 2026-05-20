@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Appointments</h2>
+<section class="card">
+  {% set rows = appointments|to_dicts %}{% include '_table.html' %}
+</section>
+{% if role == 'student' %}
+<section class="card"><h3>Book Appointment</h3><form method="post" action="{{ url_for('frontend.student_book_appointment') }}"><input name="appointment_id" required><button>Book</button></form></section>
+{% else %}
+<section class="card"><h3>Create Slots</h3><form method="post" action="{{ url_for('frontend.mentor_slots_page') }}"><input name="student_id" placeholder="Student ID" required><input name="date" placeholder="YYYY-MM-DD" required><input name="start_time" placeholder="09:00" required><input name="end_time" placeholder="10:00" required><button>Create</button></form></section>
+<section class="card"><h3>Confirm Appointment</h3><form onsubmit="this.action='/mentor/appointments/'+this.appointment_id.value+'/confirm'" method="post"><input name="appointment_id" required><input name="venue" required><button>Confirm</button></form></section>
+{% endif %}
+{% endblock %}
